@@ -115,3 +115,13 @@ img:hover{
 .bigMargin{
     margin-top:150px;
 }
+
+#donateIcon {
+    width: 40px;
+}
+
+#donateBox {
+    position: fixed;
+    bottom: 4px;
+    right: 12px;
+}
