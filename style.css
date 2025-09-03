@@ -31,6 +31,15 @@ h1 {
 	color: #555;
 }
 
+.vsh {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 /* Download Button (Top Right) */
 #download {
 	position: fixed;
