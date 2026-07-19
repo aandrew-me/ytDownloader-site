@@ -3,31 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ytDownloader | Universal Video & Audio Downloader</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="assets/icon.ico" type="image/x-icon">
-
-    <meta name="title" content="ytDownloader - Download videos and audios from hundreds of sites">
+    <title>ytDownloader - Free, Open Source, Privacy-First Video Downloader</title>
     <meta name="description"
-        content="ytDownloader is a clean, open-source video downloader that lets you save content from YouTube, Facebook, TikTok, Twitch, Instagram, Twitter, and more.">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ytdownloader.netlify.app/">
-    <meta property="og:title" content="ytDownloader - Download videos and audios from hundreds of sites">
-    <meta property="og:description"
-        content="ytDownloader lets you download videos and audios from several sites like Youtube, Facebook, Tiktok, Twitch, Instagram, Twitter and more...">
-    <meta property="og:image" content="https://cdn.statically.io/gh/aandrew-me/images/main/ss.webp">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://ytdownloader.netlify.app/">
-    <meta property="twitter:title" content="ytDownloader - Download videos and audios from hundreds of sites">
-    <meta property="twitter:description"
-        content="ytDownloader lets you download videos and audios from several sites like Youtube, Facebook, Tiktok, Twitch, Instagram, Twitter and more...">
-    <meta property="twitter:image" content="https://cdn.statically.io/gh/aandrew-me/images/main/ss.webp">
-    <meta name="google-site-verification" content="_butXuNJ3q8YGAcCLg2iRdaenDlF-UVI_aCjSM0F8TQ" />
-    <meta name="robots" content="index,follow">
+        content="Free, privacy-focused, open-source desktop app for downloading video and audio from hundreds of sites. Available for Linux, Windows, and macOS.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter+Tight:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="shortcut icon" href="assets/icon.ico" type="image/x-icon">
 
     <script type="application/ld+json">
         {
@@ -42,178 +29,728 @@
             "priceCurrency": "USD"
           },
           "description": "ytDownloader lets you download videos and extract audios in various formats from hundreds of sites including YouTube, Facebook, Tiktok, Twitch, Twitter, Instagram and more.",
-          "screenshot": "https://cdn.statically.io/gh/aandrew-me/images/main/ss.webp",
-          "url": "https://ytdownloader.netlify.app/"
+          "screenshot": "https://cdn.statically.io/gh/aandrew-me/images/main/ss_new.webp",
+          "url": "https://aandrew-me.github.io/ytDownloader-site/"
         }
     </script>
+
+
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'system';
+            const resolvedTheme = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+            document.documentElement.setAttribute('data-theme', resolvedTheme);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <header class="navbar">
-        <a target="_blank" href="https://github.com/aandrew-me/ytdownloader" class="nav-logo">
-            <img class="logo-img" src="assets/github.png" alt="GitHub Logo">
-            <span>ytDownloader</span>
-        </a>
-        <a id="download-cta" href="#downloadSection">Download App</a>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-msg">Copied to clipboard</span>
+    </div>
+
+    <!-- Nav -->
+    <header class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-[var(--border)]">
+        <div class="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
+            <a href="#" class="flex items-center gap-2.5 font-bold text-lg flex-shrink-0">
+                <span class="w-9 h-9 rounded-xl flex items-center justify-center relative overflow-hidden">
+                    <img style=" filter: saturate(140%) hue-rotate(-8deg) brightness(105%);" src="assets/icon.png"
+                        alt="App Icon">
+                </span>
+                <span>ytDownloader</span>
+            </a>
+
+            <nav class="hidden lg:flex items-center gap-8 text-sm text-[var(--muted)]">
+                <a href="#features" class="hover:text-[var(--ink)] transition">Features</a>
+                <a href="#downloads" class="hover:text-[var(--ink)] transition">Downloads</a>
+                <a href="https://github.com/aandrew-me/ytdownloader" target="_blank"
+                    class="hover:text-[var(--ink)] transition flex items-center gap-1.5">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <div class="theme-switcher" role="group" aria-label="Theme selector">
+                    <button class="theme-btn active" data-theme-choice="system" title="System Theme"
+                        aria-label="System theme">
+                        <i class="fas fa-desktop"></i>
+                    </button>
+                    <button class="theme-btn" data-theme-choice="light" title="Light Theme" aria-label="Light theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="theme-btn" data-theme-choice="dark" title="Dark Theme" aria-label="Dark theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+
+                <a href="#downloads"
+                    class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--ink)] text-[var(--bg)] text-sm font-medium hover:bg-[var(--accent)] transition">
+                    <i class="fas fa-download text-xs"></i> Download
+                </a>
+            </div>
+        </div>
     </header>
 
-    <main class="container">
-        <section class="hero">
-            <h1>Download videos & audio from hundreds of platforms</h1>
-            <p class="info">ytDownloader is completely free, privacy-focused, and
-                <a target="_blank" href="https://github.com/aandrew-me/ytdownloader"><b>Open Source</b></a>.
-                Available globally for Linux, Windows, and macOS.
+    <!-- Hero -->
+    <section class="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
+        <div class="mesh-bg">
+            <div class="mesh-blob"></div>
+            <div class="mesh-blob"></div>
+            <div class="mesh-blob"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center w-full">
+            <div class="lg:col-span-6 hero-in">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 dark:bg-[var(--surface)] border border-[var(--border)] text-xs"
+                    style="background: var(--surface);">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[var(--secondary)] pulse-dot"></span>
+                    <span class="text-[var(--muted)] font-medium">Open Source</span>
+                    <span class="text-[var(--border)]">·</span>
+                    <span class="text-[var(--muted)] font-medium">Fast Downloads</span>
+                    <span class="text-[var(--border)]">·</span>
+                    <span class="text-[var(--muted)] font-medium">Free Forever</span>
+                </div>
+
+                <h1 class="heading-xl text-5xl sm:text-6xl lg:text-7xl mt-6 mb-6">
+                    Take back your media.<br>
+                    <span class="serif-em">From anywhere.</span>
+                </h1>
+
+                <p class="text-lg text-[var(--muted)] mb-8 max-w-xl leading-relaxed">
+                    ytDownloader is a free, open-source desktop app that downloads video and audio from hundreds of
+                    sites - without ads, trackers, or compromise. Available for Windows, macOS, and Linux.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-3 mb-7">
+                    <a id="hero-download" href="#downloads" class="badge-btn">
+                        <i id="hero-icon" class="fab fa-windows text-2xl"></i>
+                        <div class="text-left">
+                            <div class="text-[11px] opacity-70 leading-none mb-1">Download for</div>
+                            <div class="font-semibold text-base leading-none" id="hero-platform">Windows</div>
+                        </div>
+                        <i class="fas fa-arrow-down ml-3 text-xs opacity-60"></i>
+                    </a>
+
+                    <a href="https://github.com/aandrew-me/ytdownloader" target="_blank"
+                        class="badge-btn badge-btn-light">
+                        <i class="fab fa-github text-2xl"></i>
+                        <div class="text-left">
+                            <div class="text-[11px] opacity-70 leading-none mb-1">View on</div>
+                            <div class="font-semibold text-base leading-none">GitHub</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[var(--muted)]">
+                    <span class="flex items-center gap-1.5"><i class="fab fa-windows"></i> Windows</span>
+                    <span class="flex items-center gap-1.5"><i class="fab fa-apple"></i> macOS</span>
+                    <span class="flex items-center gap-1.5"><i class="fab fa-linux"></i> Linux</span>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 relative hero-right">
+                <div class="browser-mockup">
+                    <div class="browser-bar">
+                        <div class="browser-dot" style="background:#ff5f57"></div>
+                        <div class="browser-dot" style="background:#febc2e"></div>
+                        <div class="browser-dot" style="background:#28c840"></div>
+                        <div class="ml-4 px-3 py-1 rounded-md text-xs text-[var(--muted)] font-mono flex-1 max-w-xs flex items-center gap-1.5 truncate"
+                            style="background: var(--browser-url-bg);">
+                            <i class="fas fa-lock text-[10px]"></i> ytDownloader - demo
+                        </div>
+                    </div>
+                    <div class="relative bg-black aspect-video">
+                        <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                            <source src="./assets/ytdownloader.mp4" type="video/mp4">
+                        </video>
+                        <div
+                            class="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur text-white text-[10px] font-mono uppercase tracking-[0.15em] flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 pulse-dot"></span>
+                            Live demo
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute -left-3 top-1/4 floating-chip hidden md:inline-flex" style="animation-delay: -2s">
+                    <i class="fas fa-shield-halved text-[var(--secondary)]"></i>
+                    Zero trackers
+                </div>
+                <div class="absolute -right-3 bottom-1/4 floating-chip hidden md:inline-flex"
+                    style="animation-delay: -4s">
+                    <i class="fas fa-bolt text-[var(--accent)]"></i>
+                    Fast downloads
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sites marquee -->
+    <section class="py-10 border-y border-[var(--border)] bg-[var(--bg-alt)] overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-6 mb-5">
+            <p class="text-center text-xs uppercase tracking-[0.25em] text-[var(--muted)] font-medium">
+                Works with hundreds of sites
             </p>
-
-            <div class="video-container">
-                <video src="https://aandrew-me.github.io/ytDownloader/assets/ytdownloader.mp4" autoplay muted loop
-                    controls playsinline loading="lazy"
-                    poster="https://cdn.statically.io/gh/aandrew-me/images/main/ss_new.webp">
-                    Your browser does not support the video tag.
-                </video>
+        </div>
+        <div class="relative">
+            <div class="marquee-track">
+                <span class="marquee-item">YouTube</span>
+                <span class="marquee-item">Facebook</span>
+                <span class="marquee-item">Instagram</span>
+                <span class="marquee-item">TikTok</span>
+                <span class="marquee-item">Twitter / X</span>
+                <span class="marquee-item">Vimeo</span>
+                <span class="marquee-item">Twitch</span>
+                <span class="marquee-item">Reddit</span>
+                <span class="marquee-item">Dailymotion</span>
+                <span class="marquee-item">SoundCloud</span>
+                <span class="marquee-item">Bilibili</span>
+                <span class="marquee-item">Patreon</span>
+                <span class="marquee-item">Bandcamp</span>
+                <span class="marquee-item">Streamable</span>
+                <span class="marquee-item">YouTube</span>
+                <span class="marquee-item">Facebook</span>
+                <span class="marquee-item">Instagram</span>
+                <span class="marquee-item">TikTok</span>
+                <span class="marquee-item">Twitter / X</span>
+                <span class="marquee-item">Vimeo</span>
+                <span class="marquee-item">Twitch</span>
+                <span class="marquee-item">Reddit</span>
+                <span class="marquee-item">Dailymotion</span>
+                <span class="marquee-item">SoundCloud</span>
+                <span class="marquee-item">Bilibili</span>
+                <span class="marquee-item">Patreon</span>
+                <span class="marquee-item">Bandcamp</span>
+                <span class="marquee-item">Streamable</span>
             </div>
-        </section>
-
-        <section class="features-section">
-            <h2>App Features</h2>
-            <div class="features-grid">
-                <div class="feature-card"><span>✅</span>
-                    <p>Supports hundreds of platforms</p>
-                </div>
-                <div class="feature-card"><span>⚡</span>
-                    <p>Hardware Accelerated Compression</p>
-                </div>
-                <div class="feature-card"><span>🎨</span>
-                    <p>Multiple beautiful themes</p>
-                </div>
-                <div class="feature-card"><span>⏱️</span>
-                    <p>Download specific timestamp ranges</p>
-                </div>
-                <div class="feature-card"><span>📝</span>
-                    <p>Subtitles downloading built-in</p>
-                </div>
-                <div class="feature-card"><span>🌐</span>
-                    <p>Available in several languages</p>
-                </div>
-                <div class="feature-card"><span>🚀</span>
-                    <p>Blazing fast download speeds</p>
-                </div>
-                <div class="feature-card"><span>📂</span>
-                    <p>Customizable download directory</p>
-                </div>
-                <div class="feature-card"><span>🛡️</span>
-                    <p>100% clean—No ads or trackers</p>
-                </div>
+            <div
+                class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[var(--bg-alt)] to-transparent pointer-events-none">
             </div>
-        </section>
+            <div
+                class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[var(--bg-alt)] to-transparent pointer-events-none">
+            </div>
+        </div>
+    </section>
 
-        <section id="downloadSection" class="download-section">
-            <h2>Get ytDownloader</h2>
-            <p class="section-subtitle">Select your operating system to begin downloading.</p>
+    <!-- Features -->
+    <section id="features" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="reveal mb-14 max-w-3xl">
+                <div class="platform-pill accent mb-5">
+                    <i class="fas fa-star"></i> Features
+                </div>
+                <h2 class="heading-xl text-4xl sm:text-5xl lg:text-6xl mb-5">
+                    Built for people who <span class="serif-em">actually download things.</span>
+                </h2>
+                <p class="text-lg text-[var(--muted)]">
+                    Every feature you'd expect from a power-user downloader, and none of the junk you'd expect from a
+                    "free" one.
+                </p>
+            </div>
 
-            <div class="os-grid">
-                <div class="os-card" id="linux">
-                    <h3>Linux</h3>
-                    <div class="badge-container">
-                        <a target="_blank" href="https://snapcraft.io/ytdownloader"><img class="badge"
-                                src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg"
-                                alt="Get it from the Snap Store"></a>
-                        <a target="_blank" href="https://flathub.org/apps/details/me.aandrew.ytdownloader"><img
-                                class="badge" alt="Get it on Flathub"
-                                src="https://flathub.org/api/badge?svg&locale=en"></a>
-                        <a
-                            href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Linux.AppImage"><img
-                                class="badge" src="assets/appimage.png" alt="Download AppImage"></a>
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                <!-- Hundreds of sites -->
+                <div class="feature-card md:col-span-4 reveal">
+                    <div class="feature-card-icon" style="background: var(--icon-orange-bg); color: var(--accent);">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Hundreds of sites, one app</h3>
+                    <p class="text-[var(--muted)] mb-5 leading-relaxed">YouTube, Facebook, Instagram, TikTok, Twitter,
+                        Vimeo, Twitch, Reddit, and hundreds more. If it serves video, ytDownloader probably handles it.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="site-chip">YouTube</span>
+                        <span class="site-chip">Facebook</span>
+                        <span class="site-chip">Instagram</span>
+                        <span class="site-chip">TikTok</span>
+                        <span class="site-chip">Twitter / X</span>
+                        <span class="site-chip">+ hundreds more</span>
                     </div>
                 </div>
 
-                <div class="os-card" id="windows">
-                    <h3>Windows</h3>
-                    <p class="card-note">The <b>EXE</b> build features dynamic auto-updates and customizable
-                        installation routing. The <b>MSI</b> build offers static deployment.</p>
-                    <div class="badge-container">
-                        <a href="https://get.microsoft.com/installer/download/9pm2p40txw2s?referrer=appbadge"
-                            target="_self">
-                            <img class="badge" src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" />
-                        </a>
-                        <a
-                            href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Win.exe"><img
-                                src="assets/win_exe.png" class="badge" alt="Download Windows EXE"></a>
-                        <a
-                            href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Win.msi"><img
-                                src="assets/win_msi.png" class="badge" alt="Download Windows MSI"></a>
-                        <a target="blank" href="https://community.chocolatey.org/packages/ytdownloader"><img
-                                src="assets/win_choco.png" class="badge" alt="Get it via Chocolatey"></a>
+                <!-- Privacy -->
+                <div class="feature-card md:col-span-2 reveal" style="background: var(--feature-gradient);">
+                    <div class="feature-card-icon" style="background: var(--icon-green-bg); color: var(--secondary);">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Privacy first. Always.</h3>
+                    <p class="text-[var(--muted)] mb-5 text-sm leading-relaxed">No trackers. No ads. No analytics. No
+                        telemetry. Your downloads stay your business.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-[var(--secondary)]"></i> Zero
+                            trackers</div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-[var(--secondary)]"></i> Zero
+                            ads</div>
+                        <div class="flex items-center gap-2"><i class="fas fa-check text-[var(--secondary)]"></i> 100%
+                            open source</div>
                     </div>
                 </div>
 
-                <div class="os-card" id="mac">
-                    <h3>macOS</h3>
-                    <div class="macInstructions">
-                        <p>Because this package is community-signed, you will need to flag it safe via your Terminal:
-                        </p>
-                        <div class="code-wrapper">
-                            <code>sudo xattr -r -d com.apple.quarantine /Applications/YTDownloader.app</code>
-                            <button class="copy-btn" aria-label="Copy code" onclick="copyCode(this)">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
+                <!-- Hardware acceleration -->
+                <div class="feature-card md:col-span-2 reveal">
+                    <div class="feature-card-icon" style="background: var(--icon-amber-bg); color: var(--amber);">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Hardware-accelerated compression</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Compress videos fast using your GPU. Less
+                        waiting, smaller files, same quality.</p>
+                </div>
+
+                <!-- Themes -->
+                <div class="feature-card md:col-span-2 reveal">
+                    <div class="feature-card-icon" style="background: var(--icon-rose-bg); color: var(--rose);">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Multiple themes</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Make ytDownloader look the way you want.
+                        Built-in themes to match your style.</p>
+                </div>
+
+                <!-- Audio -->
+                <div class="feature-card md:col-span-2 reveal">
+                    <div class="feature-card-icon" style="background: var(--icon-green-bg); color: var(--secondary);">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Audio in any format</h3>
+                    <p class="text-[var(--muted)] text-sm leading-relaxed">Extract audio as MP3, M4A, WAV, and more.
+                        Perfect for music, podcasts, and lectures.</p>
+                </div>
+
+                <!-- Power features -->
+                <div class="feature-card md:col-span-6 reveal">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div>
+                            <div class="feature-card-icon mb-4"
+                                style="background: rgba(232,78,27,0.2); color: var(--accent);">
+                                <i class="fas fa-list-ol"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Playlist downloads</h3>
+                            <p class="opacity-70 text-sm leading-relaxed">Grab an entire playlist in one click. Set it
+                                running, walk away, come back to a folder full of videos.</p>
+                        </div>
+                        <div class="md:border-l md:border-white/10 md:pl-8">
+                            <div class="feature-card-icon mb-4"
+                                style="background: rgba(255,209,102,0.15); color: #ffd166;">
+                                <i class="fas fa-closed-captioning"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Subtitles</h3>
+                            <p class="opacity-70 text-sm leading-relaxed">Download subtitles alongside your videos.
+                                Multiple languages supported.</p>
+                        </div>
+                        <div class="md:border-l md:border-white/10 md:pl-8">
+                            <div class="feature-card-icon mb-4"
+                                style="background: rgba(255,255,255,0.08); color: white;">
+                                <i class="fas fa-scissors"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">Range selection</h3>
+                            <p class="opacity-70 text-sm leading-relaxed">Pick a specific time range. Download only the
+                                part of the video you actually want.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats band -->
+    <section class="py-16 bg-[var(--ink)] text-[var(--bg)] relative overflow-hidden">
+        <div class="absolute inset-0 dot-pattern text-[var(--bg)]" style="opacity: 0.05;"></div>
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
+            <div class="reveal">
+                <div class="stat-num text-5xl sm:text-6xl mb-2" style="color: var(--accent);">100+</div>
+                <div class="text-sm opacity-70">Supported sites</div>
+            </div>
+            <div class="reveal">
+                <div class="stat-num text-5xl sm:text-6xl mb-2" style="color: #f7b417;">3</div>
+                <div class="text-sm opacity-70">Desktop platforms</div>
+            </div>
+            <div class="reveal">
+                <div class="stat-num text-5xl sm:text-6xl mb-2" style="color: #2dd4bf;">0</div>
+                <div class="text-sm opacity-70">Trackers &amp; ads</div>
+            </div>
+            <div class="reveal">
+                <div class="stat-num text-5xl sm:text-6xl mb-2 text-[var(--bg)]">$0</div>
+                <div class="text-sm opacity-70">Free, forever</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Downloads -->
+    <section id="downloads" class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="reveal text-center mb-12 max-w-3xl mx-auto">
+                <div class="platform-pill accent mb-5">
+                    <i class="fas fa-download"></i> Download
+                </div>
+                <h2 class="heading-xl text-4xl sm:text-5xl lg:text-6xl mb-5">
+                    Get ytDownloader <span class="serif-em">free, forever.</span>
+                </h2>
+                <p class="text-lg text-[var(--muted)]">
+                    Pick your preferred install method below.
+                </p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex justify-center gap-2 mb-10 flex-wrap reveal">
+                <button class="tab-btn active" data-tab="windows">
+                    <i class="fab fa-windows mr-2"></i> Windows
+                </button>
+                <button class="tab-btn" data-tab="macos">
+                    <i class="fab fa-apple mr-2"></i> macOS
+                </button>
+                <button class="tab-btn" data-tab="linux">
+                    <i class="fab fa-linux mr-2"></i> Linux
+                </button>
+            </div>
+
+            <!-- Windows -->
+            <div class="tab-content active" data-content="windows">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a href="https://apps.microsoft.com/detail/9pm2p40txw2s" target="_blank" class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon"><i class="fab fa-windows"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Get it from</div>
+                                <div class="font-semibold">Microsoft Store</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                    <a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Win.exe"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon"><i class="fas fa-file-zipper"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Direct download</div>
+                                <div class="font-semibold">.exe Installer</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                    <a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Win.msi"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon"><i class="fas fa-gear"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">For system admins</div>
+                                <div class="font-semibold">.msi Installer</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                    <a href="https://community.chocolatey.org/packages/ytdownloader" target="_blank"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon" style="background:#5b8def;"><i class="fas fa-mug-hot"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Package manager</div>
+                                <div class="font-semibold">Chocolatey</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                </div>
+                <div
+                    class="mt-4 p-4 rounded-xl bg-[var(--bg-alt)] border border-[var(--border)] text-sm text-[var(--muted)] flex items-start gap-2.5">
+                    <i class="fas fa-circle-info mt-0.5 text-[var(--accent)]"></i>
+                    <div>Prefer the command line? Install via Chocolatey: <code
+                            class="font-mono text-[var(--ink)] bg-[var(--surface)] px-1.5 py-0.5 rounded border border-[var(--border)]">choco install ytdownloader</code>
+                        or Winget: <code
+                            class="font-mono text-[var(--ink)] bg-[var(--surface)] px-1.5 py-0.5 rounded border border-[var(--border)]">winget install aandrew-me.ytDownloader</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- macOS -->
+            <div class="tab-content" data-content="macos">
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Mac_arm64.dmg"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon"><i class="fab fa-apple"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Apple Silicon · M1 / M2 / M3</div>
+                                <div class="font-semibold">.dmg (arm64)</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                    <a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Mac_x64.dmg"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon"><i class="fab fa-apple"></i></div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Intel-based Macs</div>
+                                <div class="font-semibold">.dmg (x64)</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                </div>
+                <div
+                    class="mt-4 p-4 rounded-xl bg-[var(--bg-alt)] border border-[var(--border)] text-sm text-[var(--muted)] flex items-start gap-2.5">
+                    <i class="fas fa-circle-info mt-0.5 text-[var(--accent)]"></i>
+                    <div>Community-signed build. See <a href="#macos-help"
+                            class="text-[var(--accent)] underline font-medium">macOS setup instructions</a> below - two
+                        quick Terminal commands.</div>
+                </div>
+            </div>
+
+            <!-- Linux -->
+            <div class="tab-content" data-content="linux">
+                <div class="grid sm:grid-cols-3 gap-4">
+                    <a href="https://snapcraft.io/ytdownloader" target="_blank" class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon">
+                                <img src="assets/snapcraft.webp" alt="Snapcraft" class="h-8 w-8" />
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Snap Store</div>
+                                <div class="font-semibold">Snapcraft</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                    <a href="https://flathub.org/apps/details/me.aandrew.ytdownloader" target="_blank"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon">
+                                <img src="assets/flathub.webp" alt="Flathub" class="h-8 w-8" />
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Flatpak repository</div>
+                                <div class="font-semibold">Flathub</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                    <a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Linux.AppImage"
+                        class="download-card">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="download-card-icon">
+                                <img src="assets/appimage.webp" alt="AppImage" class="h-10 w-10" />
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs text-[var(--muted)]">Portable · no install</div>
+                                <div class="font-semibold">AppImage</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-right text-[var(--muted)] text-sm"></i>
+                    </a>
+                </div>
+                <div
+                    class="mt-4 p-4 rounded-xl bg-[var(--bg-alt)] border border-[var(--border)] text-sm text-[var(--muted)] flex items-start gap-2.5">
+                    <i class="fas fa-circle-info mt-0.5 text-[var(--accent)]"></i>
+                    <div>Install via Snap: <code
+                            class="font-mono text-[var(--ink)] bg-[var(--surface)] px-1.5 py-0.5 rounded border border-[var(--border)]">snap install ytdownloader</code>
+                        or Flatpak: <code
+                            class="font-mono text-[var(--ink)] bg-[var(--surface)] px-1.5 py-0.5 rounded border border-[var(--border)]">flatpak install flathub me.aandrew.ytdownloader</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- macOS instructions -->
+    <section id="macos-help" class="py-24 bg-[var(--bg-alt)] border-y border-[var(--border)] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--accent)] opacity-5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-[var(--secondary)] opacity-5 rounded-full blur-3xl"></div>
+        <div class="max-w-4xl mx-auto px-6 relative">
+            <div class="reveal text-center mb-12">
+                <div class="platform-pill mb-5">
+                    <i class="fab fa-apple"></i> macOS Setup
+                </div>
+                <h2 class="heading-xl text-4xl sm:text-5xl mb-4">
+                    Setting up on macOS <span class="serif-em">takes a minute.</span>
+                </h2>
+                <p class="text-[var(--muted)] text-lg max-w-2xl mx-auto">
+                    ytDownloader is not signed, so macOS needs a quick Terminal nudge. Run these two commands
+                    after installing the .dmg.
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="reveal">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span
+                            class="w-8 h-8 rounded-full bg-[var(--ink)] text-[var(--bg)] flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
+                        <h3 class="text-lg font-semibold">Flag the app as safe</h3>
+                    </div>
+                    <p class="text-[var(--muted)] text-sm mb-4 ml-11 leading-relaxed">Because this package is
+                        not signed, you'll need to flag it safe via Terminal. Drag the YTDownloader.app to your
+                        Applications folder first.</p>
+                    <div class="terminal ml-0 sm:ml-11">
+                        <div class="flex items-center justify-between mb-3 pb-3 border-b border-white/10">
+                            <div class="flex items-center gap-2 text-xs opacity-70">
+                                <i class="fas fa-circle text-[#ff5f57] text-[8px]"></i>
+                                <i class="fas fa-circle text-[#febc2e] text-[8px]"></i>
+                                <i class="fas fa-circle text-[#28c840] text-[8px]"></i>
+                                <span class="ml-2">Terminal</span>
+                            </div>
+                            <button class="copy-btn"
+                                data-copy="sudo xattr -r -d com.apple.quarantine /Applications/YTDownloader.app"
+                                aria-label="Copy command">
+                                <i class="fas fa-copy"></i> <span>Copy</span>
                             </button>
                         </div>
-
-                        <p>Ensure you have dependency support via <a href="https://brew.sh/"
-                                target="_blank">Homebrew</a>:</p>
-                        <div class="code-wrapper">
-                            <code>brew install yt-dlp</code>
-                            <button class="copy-btn" aria-label="Copy code" onclick="copyCode(this)">
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                            </button>
+                        <div class="leading-relaxed">
+                            <span class="terminal-comment"># Flag the community-signed app as safe</span><br>
+                            <span class="terminal-prompt">$</span> <span class="terminal-cmd">sudo xattr -r -d
+                                com.apple.quarantine /Applications/YTDownloader.app</span>
                         </div>
                     </div>
-                    <div class="badge-container">
-                        <a
-                            href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Mac_x64.dmg">
-                            <img class="badge mac-badge"
-                                src="https://cdn.jsdelivr.net/gh/aandrew-me/badges/download_mac_intel.png"
-                                alt="Download Intel Mac Package">
-                        </a>
-                        <a
-                            href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Mac_arm64.dmg">
-                            <img class="badge mac-badge"
-                                src="https://cdn.jsdelivr.net/gh/aandrew-me/badges/download_mac_apple_silicon.png"
-                                alt="Download Apple Silicon Package">
-                        </a>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="reveal">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span
+                            class="w-8 h-8 rounded-full bg-[var(--ink)] text-[var(--bg)] flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
+                        <h3 class="text-lg font-semibold">Install the dependency via Homebrew</h3>
+                    </div>
+                    <p class="text-[var(--muted)] text-sm mb-4 ml-11 leading-relaxed">Ensure you have dependency support
+                        via Homebrew. If you don't have Homebrew, install it from <a href="https://brew.sh"
+                            target="_blank" class="text-[var(--accent)] underline font-medium">brew.sh</a> first.</p>
+                    <div class="terminal ml-0 sm:ml-11">
+                        <div class="flex items-center justify-between mb-3 pb-3 border-b border-white/10">
+                            <div class="flex items-center gap-2 text-xs opacity-70">
+                                <i class="fas fa-circle text-[#ff5f57] text-[8px]"></i>
+                                <i class="fas fa-circle text-[#febc2e] text-[8px]"></i>
+                                <i class="fas fa-circle text-[#28c840] text-[8px]"></i>
+                                <span class="ml-2">Terminal</span>
+                            </div>
+                            <button class="copy-btn" data-copy="brew install yt-dlp" aria-label="Copy command">
+                                <i class="fas fa-copy"></i> <span>Copy</span>
+                            </button>
+                        </div>
+                        <div class="leading-relaxed">
+                            <span class="terminal-comment"># Install yt-dlp via Homebrew</span><br>
+                            <span class="terminal-prompt">$</span> <span class="terminal-cmd">brew install yt-dlp</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <script>
-        function copyCode(button) {
-            const codeText = button.previousElementSibling.innerText;
+            <div
+                class="mt-8 p-5 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm text-[var(--muted)] flex items-start gap-3">
+                <i class="fas fa-lightbulb text-[var(--accent)] mt-0.5"></i>
+                <div>That's it. After both commands finish, launch ytDownloader from your Applications folder or
+                    Launchpad.</div>
+            </div>
+        </div>
+    </section>
 
-            navigator.clipboard.writeText(codeText).then(() => {
-                button.classList.add('copied');
-                const defaultIcon = button.innerHTML;
+    <!-- Final CTA -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="mesh-bg">
+            <div class="mesh-blob" style="top:20%; left:10%;"></div>
+            <div class="mesh-blob" style="bottom:-100px; right:5%; animation-delay: -10s;"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 reveal">
+            <h2 class="heading-xl text-4xl sm:text-5xl lg:text-6xl mb-6">
+                Stop feeding the algorithm.<br>
+                <span class="serif-em">Start your archive.</span>
+            </h2>
+            <p class="text-lg text-[var(--muted)] mb-9 max-w-xl mx-auto">
+                Free, open-source, no strings attached. Download ytDownloader and take control of your media today.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+                <a href="#downloads" class="badge-btn">
+                    <i class="fas fa-download text-xl"></i>
+                    <div class="text-left">
+                        <div class="text-[11px] opacity-70 leading-none mb-1">Get ytDownloader</div>
+                        <div class="font-semibold text-base leading-none">Choose your platform</div>
+                    </div>
+                </a>
+                <a href="https://github.com/aandrew-me/ytdownloader" target="_blank" class="badge-btn badge-btn-light">
+                    <i class="fab fa-github text-xl"></i>
+                    <div class="text-left">
+                        <div class="text-[11px] opacity-70 leading-none mb-1">Star on</div>
+                        <div class="font-semibold text-base leading-none">GitHub</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
-                button.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    <!-- Footer -->
+    <footer class="border-t border-[var(--border)] py-12 bg-[var(--bg-alt)]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-1">
+                    <a href="#" class="flex items-center gap-2.5 font-bold text-lg mb-3">
+                        <span class="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden">
+                            <img src="assets/icon.png" alt="ytDownloader icon" class="w-8 h-8 object-contain" />
+                        </span>
+                        ytDownloader
+                    </a>
+                    <p class="text-sm text-[var(--muted)] leading-relaxed">Free, open-source, privacy-focused video
+                        downloader for Windows, macOS, and Linux.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3 text-xs uppercase tracking-wider text-[var(--muted)]">Windows</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://get.microsoft.com/installer/download/9pm2p40txw2s?referrer=appbadge"
+                                target="_blank" class="hover:text-[var(--accent)] transition">Microsoft Store</a></li>
+                        <li><a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Win.exe"
+                                class="hover:text-[var(--accent)] transition">.exe Installer</a></li>
+                        <li><a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Win.msi"
+                                class="hover:text-[var(--accent)] transition">.msi Installer</a></li>
+                        <li><a href="https://community.chocolatey.org/packages/ytdownloader" target="_blank"
+                                class="hover:text-[var(--accent)] transition">Chocolatey</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3 text-xs uppercase tracking-wider text-[var(--muted)]">macOS &amp;
+                        Linux</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Mac_arm64.dmg"
+                                class="hover:text-[var(--accent)] transition">macOS (Apple Silicon)</a></li>
+                        <li><a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Mac_x64.dmg"
+                                class="hover:text-[var(--accent)] transition">macOS (Intel)</a></li>
+                        <li><a href="https://snapcraft.io/ytdownloader" target="_blank"
+                                class="hover:text-[var(--accent)] transition">Linux - Snap</a></li>
+                        <li><a href="https://flathub.org/apps/details/me.aandrew.ytdownloader" target="_blank"
+                                class="hover:text-[var(--accent)] transition">Linux - Flatpak</a></li>
+                        <li><a href="https://github.com/aandrew-me/ytDownloader/releases/latest/download/YTDownloader_Linux.AppImage"
+                                class="hover:text-[var(--accent)] transition">Linux - AppImage</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3 text-xs uppercase tracking-wider text-[var(--muted)]">Project</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/aandrew-me/ytdownloader" target="_blank"
+                                class="hover:text-[var(--accent)] transition flex items-center gap-1.5"><i
+                                    class="fab fa-github w-4"></i> GitHub Repository</a></li>
+                        <li><a href="https://github.com/aandrew-me/ytDownloader/releases" target="_blank"
+                                class="hover:text-[var(--accent)] transition flex items-center gap-1.5"><i
+                                    class="fas fa-tag w-4"></i> Releases</a></li>
+                        <li><a href="https://github.com/aandrew-me/ytdownloader/issues" target="_blank"
+                                class="hover:text-[var(--accent)] transition flex items-center gap-1.5"><i
+                                    class="fas fa-bug w-4"></i> Report an Issue</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-[var(--muted)]">
+                <p>© ytDownloader · Open source under GPL license.</p>
+                <p class="flex items-center gap-1.5">
+                    <i class="fas fa-shield-halved text-[var(--secondary)]"></i>
+                    No trackers. No ads. No nonsense.
+                </p>
+            </div>
+        </div>
+    </footer>
 
-                setTimeout(() => {
-                    button.classList.remove('copied');
-                    button.innerHTML = defaultIcon;
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-            });
-        }
-    </script>
+    <script src="./script.js"></script>
 </body>
 
 </html>
